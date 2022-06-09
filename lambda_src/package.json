@@ -1,5 +1,5 @@
 {
-    "main": "index.js",
+    "main": "lambda_hello_world.py",
     "dependencies": {
       "boto3": "1.21.32"
     }
