@@ -1,8 +1,12 @@
+import glob
 import json
 import logging
 import boto3
+import time
 from botocore.exceptions import ClientError
 import os
+
+from requests import delete
 
 AWS_REGION = 'us-east-1'
 AWS_PROFILE = 'localstack'
@@ -44,6 +48,38 @@ def del_bucket(b_name):
         logger.exception(f'Error: could not delete bucket: {err}')
     else:
         return resp
+    
+    
+def del_file(b_name, f_name):
+    
+    try:
+        s3_resource.Object(b_name, f_name).delete()
+    except Exception as err:
+        logger.exception(f'Error: could not delete File: {err}')
+        
+    
+    
+def upload_file(f_name, bucket, obj_name=None):
+    
+    try:
+        if obj_name is None: obj_name = os.path.basename(f_name) 
+        resp = s3_client.upload_file(f_name, bucket, obj_name)
+    except ClientError as err:
+        logger.exception (f'Error: could not Upload file to {bucket}: {err}')
+    else:
+        return resp
+    
+    
+def list_bucket_contents(b_name):
+    try:
+        bucket = s3_resource.Bucket(b_name)
+        resp = []
+        for obj in bucket.objects.all():
+            resp.append(obj.key)
+    except Exception as err:
+        logger.exception(f'Error: {err}')
+    else:
+        return resp
 
 
 def main():
@@ -53,8 +89,20 @@ def main():
     logger.info('Creating S3 bucket on localy ...')
     s3_log = create_bucket(b_name)
     logger.info(json.dumps(s3_log, indent=4)+ '\n')
+    
+    files = glob.glob('./import/*.txt')
+    for file in files:
+        upload_file(file, b_name)
+        
+    s3_log = list_bucket_contents(b_name)
+    logger.info(s3_log)
+    
+    del_file(b_name, 'file1.txt')
+    s3_log = list_bucket_contents(b_name)
+    logger.info(s3_log)    
+    
+#    time.sleep(2)
     del_bucket(b_name)
-    pass
 
 
 if __name__ == '__main__':
