@@ -1,0 +1,6 @@
+{
+    "main": "index.js",
+    "dependencies": {
+      "boto3": "1.21.32"
+    }
+  }
