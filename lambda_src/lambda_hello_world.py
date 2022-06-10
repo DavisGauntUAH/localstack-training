@@ -25,4 +25,4 @@ def handler(event, context):
     bucket_dat = event['Records'][0]['s3']['bucket']
     file_dat = event['Records'][0]['s3']['object']
      
-    logger.info(f'You created {file_dat["key"]} in {bucket_dat["name"]}\n')
+    logger.warning(f'You created {file_dat["key"]} in {bucket_dat["name"]}\n')
