@@ -101,7 +101,7 @@ def main():
     logger.info(s3_log)    
     
 #    time.sleep(2)
-    del_bucket(b_name)
+#    del_bucket(b_name)
 
 
 if __name__ == '__main__':
