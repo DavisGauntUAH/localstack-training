@@ -2,7 +2,6 @@ import glob
 import json
 import logging
 import boto3
-import time
 from botocore.exceptions import ClientError
 import os
 
