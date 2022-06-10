@@ -25,4 +25,4 @@ def handler(event, context):
     bucket_dat = event['Records'][0]['s3']['bucket']
     file_dat = event['Records'][0]['s3']['object']
      
-    raise Exception (f'SUCSESS you created {file_dat["key"]} in bucket {bucket_dat["name"]}')
+    logger.info(f'You created {file_dat["key"]} in {bucket_dat["name"]}\n')
